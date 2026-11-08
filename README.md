@@ -18,7 +18,7 @@ municipality or small platform can pay its people the same way.
 | Payment rules | `src/payment.ts` | Pure functions: an account may receive only if pey says it is `ACTIVE` **and** it holds the worker's own CLABE; an order is marked paid only on the exact amount into the requested account; a second payment is flagged `already_paid` (pey cannot refund). |
 | CLABE | `src/clabe.ts` | 18-digit CLABE check-digit validation (tested against real accounts) and masking. |
 | Receipt checks | `src/receipt.ts` | Deterministic verification of a purchase receipt: date is today (Mexico City time), printed after the job was accepted, uploaded near the store, total matches what was typed and doesn't exceed the customer's own price, photo and folio not reused. Failures add reasons; they never silently block. |
-| Receipt reader (optional) | `src/claude-reader.ts` | Reads a receipt photo with Claude using structured output. It only extracts fields; `checkReceipt()` makes every decision. |
+| Receipt reader (optional) | `src/openai-reader.ts` | Reads a receipt photo with the OpenAI API (Responses API, strict structured output; default model `gpt-5.5`). It only extracts fields; `checkReceipt()` makes every decision. Provider-neutral interface and schema in `src/receipt-reader.ts`. |
 
 ## Install
 
@@ -26,7 +26,7 @@ municipality or small platform can pay its people the same way.
 npm install github:EmpowerTours/codi-direct
 ```
 
-Requires Node 20+. The receipt reader additionally needs `@anthropic-ai/sdk` and `zod`.
+Requires Node 20+. The receipt reader additionally needs `openai` (v6+) and `zod`.
 
 ## Usage
 
@@ -54,10 +54,26 @@ if (ev?.kind === "paid") {
 
 Amounts are integer **centavos** everywhere; the client converts to pesos for pey.
 
+### Receipt photos (optional)
+
+```ts
+import { OpenAIReceiptReader } from "codi-direct/openai-reader";
+import { checkReceipt } from "codi-direct";
+
+const reader = new OpenAIReceiptReader(process.env.OPENAI_API_KEY!, { model: process.env.OPENAI_MODEL }); // default "gpt-5.5"
+const reading = await reader.read(photoBuffer, "image/jpeg"); // null = no receipt in the photo; throws on refusal/API error
+const check = checkReceipt({ reading, amount, expectedItems, acceptedAt, uploadedAt, courierLocation, pickup, duplicatePhoto, duplicateFolio });
+```
+
+**Migrating from `codi-direct/claude-reader`:** that export and `ClaudeReceiptReader` were removed. Import
+`OpenAIReceiptReader` from `codi-direct/openai-reader` and pass an OpenAI API key (not an Anthropic key).
+`ReceiptReader`, `ReceiptFields`, `toReading` and `FixedReceiptReader` are unchanged and now come from
+`codi-direct/receipt-reader` (also re-exported by `codi-direct/openai-reader`).
+
 ## Tests
 
 ```bash
-npm test        # vitest: CLABE, receipt rules, payment decisions, webhook signatures and replay
+npm test        # vitest: CLABE, receipt rules, payment decisions, webhook signatures and replay, receipt reader (mocked HTTP)
 npm run typecheck
 ```
 
