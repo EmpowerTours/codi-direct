@@ -1,0 +1,32 @@
+codi-direct
+Copyright (c) 2026 EmpowerTours S.A.S. de C.V.
+
+Licensed under the GNU Affero General Public License v3.0 — see LICENSE.
+
+WHY AGPL AND NOT MIT
+
+This library exists so that a platform can collect a payment for a worker and
+have it land in the worker's own bank account, without the platform ever
+holding the money. MIT would let anyone take that code, close it, and sell it
+back to the same workers' employers with no obligation to anyone.
+
+AGPL-3.0 is OSI-approved and genuinely open source: you may read, run, modify
+and redistribute this software. What it adds is section 13 — if you run a
+MODIFIED version of this software as a network service, you must offer your
+users the complete corresponding source of your version, under this same
+licence.
+
+Someone may fork this and compete; they may not fork it, close it, and compete.
+
+COMMERCIAL LICENCE
+
+For anyone who wants to build on this without AGPL section 13's obligations —
+i.e. to run a modified version as a service with their own source closed — a
+commercial licence is available from EmpowerTours. Enquiries:
+admin@empowertours.xyz
+
+THIRD PARTIES
+
+CoDi® is a registered trademark of Banco de México. pey (https://pey.mx) is an
+independent payments provider; this project is not affiliated with or endorsed
+by Banco de México or pey.

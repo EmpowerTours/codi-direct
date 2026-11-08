@@ -1,0 +1,36 @@
+{
+  "name": "codi-direct",
+  "version": "0.1.0",
+  "description": "Pay workers directly with CoDi (Banxico) through pey: signed webhooks, per-payment routing to the worker's own account, CLABE validation and deterministic receipt checks.",
+  "license": "AGPL-3.0-only",
+  "author": "EmpowerTours S.A.S. de C.V. <admin@empowertours.xyz>",
+  "repository": { "type": "git", "url": "https://github.com/EmpowerTours/codi-direct" },
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./claude-reader": "./src/claude-reader.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "standardwebhooks": "1.1.1"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/sdk": ">=0.70.0",
+    "zod": "^3.25.0"
+  },
+  "peerDependenciesMeta": {
+    "@anthropic-ai/sdk": { "optional": true },
+    "zod": { "optional": true }
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "*",
+    "@types/node": "^22.10.0",
+    "typescript": "~5.6.3",
+    "vitest": "^2.1.8",
+    "zod": "^3.25.76"
+  },
+  "engines": { "node": ">=20" }
+}
